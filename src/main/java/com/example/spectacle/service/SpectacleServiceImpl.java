@@ -15,6 +15,8 @@ import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +35,7 @@ public class SpectacleServiceImpl implements SpectacleServiceInt {
     public void initSpectacle() throws ParseException {
         Spectacle spectacle1 = new Spectacle(
                 "AMIR"
+                , new ArrayList<String>(Arrays.asList("photo1_1.jpg","photo1_2.jpg"))
                 , TypeSpectacle.Musique
                 , 50.632538
                 , 3.0781436
@@ -53,6 +56,7 @@ public class SpectacleServiceImpl implements SpectacleServiceInt {
 
         Spectacle spectacle2 = new Spectacle(
                 "VITAA & SLIMANE"
+                , new ArrayList<String>(Arrays.asList("photo2_1.jpg"))
                 , TypeSpectacle.Musique
                 ,50.61420440673828
                 ,3.1350412368774414
@@ -72,6 +76,7 @@ public class SpectacleServiceImpl implements SpectacleServiceInt {
 
         Spectacle spectacle3 = new Spectacle(
                 "LE PLUS GRAND CABARET DU MONDE"
+                , new ArrayList<String>(Arrays.asList("photo3_1.jpg","photo3_2.jpg"))
                 , TypeSpectacle.Danse
                 , 50.632538
                 , 3.0781436
@@ -98,6 +103,7 @@ public class SpectacleServiceImpl implements SpectacleServiceInt {
 
         Spectacle spectacle4 = new Spectacle(
                 "JEREMY FERRARI Anesthésie Générale"
+                , new ArrayList<String>(Arrays.asList("photo4_1.jpg","photo4_2.jpg"))
                 , TypeSpectacle.Humour
                 ,50.629191
                 , 3.058120

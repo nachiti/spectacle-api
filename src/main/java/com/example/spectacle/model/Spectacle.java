@@ -51,4 +51,19 @@ public class Spectacle implements Serializable {
         this.interExter = interExter;
         this.favoris = false;
     }
+
+    public Spectacle(String titre, Collection<String> photosUrl, TypeSpectacle typeSpectacle, double latitude, double longitude, String adresse, Date dateHeure, double prix, String description, boolean accesHadicap, InterExter interExter) {
+        this.titre = titre;
+        this.photosUrl =photosUrl;
+        this.typeSpectacle = typeSpectacle;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.adresse = adresse;
+        this.dateHeure = dateHeure;
+        this.prix = prix;
+        this.description = description;
+        this.accesHadicap = accesHadicap;
+        this.interExter = interExter;
+        this.favoris = false;
+    }
 }

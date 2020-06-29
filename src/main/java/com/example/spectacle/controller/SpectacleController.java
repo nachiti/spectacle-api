@@ -6,13 +6,20 @@ import com.example.spectacle.model.Spectacle;
 import com.example.spectacle.service.CommentaireServiceInt;
 import com.example.spectacle.service.SpectacleServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 public class SpectacleController {
 
     @Autowired
@@ -21,19 +28,19 @@ public class SpectacleController {
     private CommentaireServiceInt commentaireServiceInt;
 
     //get All Spectacles
-    @GetMapping("/spectacles")
+    @GetMapping("/api/spectacles")
     public List<Spectacle> getAllSpectacles() {
         return spectacleServiceInt.getAllSpectacles();
     }
 
     //get spectacles by id
-    @GetMapping("/spectacles/{id}")
+    @GetMapping("/api/spectacles/{id}")
     public Spectacle getSpectaclesById(@PathVariable Long id) {
         return spectacleServiceInt.getSpectaclesById(id);
     }
 
     //get spectacles by different criteria
-    @GetMapping("/spectacles/seachBy")
+    @GetMapping("/api/spectacles/seachBy")
     public List<Spectacle> getSpectaclesByCriteria(@RequestParam(name = "ville", required = false) String ville,
                                                    @RequestParam(name = "type", required = false)String type,
                                                    @RequestParam(name = "prixMin", required = false)Double prixMin,
@@ -43,16 +50,30 @@ public class SpectacleController {
     }
 
     //add commentaire in spectacle
-    @PostMapping("/Commentaires")
+    @PostMapping("/api/Commentaires")
     public Commentaire addCommentaire(@RequestBody Commentaire commentaire){
         return commentaireServiceInt.addCommentaire(commentaire);
+    }
+
+    //get list imagesName of spectacle
+    @GetMapping(value = "/api/spectacles/{id}/images")
+    public List<String> getImagesnameOfSpectacle(@PathVariable Long id){
+        return new ArrayList<>(spectacleServiceInt.getSpectaclesById(id).getPhotosUrl());
+    }
+
+    // get images of spectacle
+    @GetMapping(value = "/api/images/{name}",produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getImagesOfSpectacle(@PathVariable String name)throws IOException {
+        Resource resource = new ClassPathResource("static/images/"+name);
+        File file = resource.getFile();
+        Path path = Paths.get(file.toURI());
+        return Files.readAllBytes(path);
     }
 
 
     //**Api d' administation**//
 
     //add spectacle
-    @Secured(value = "ROLEADMIN")
     @PostMapping("/spectacles")
     public Spectacle addSpectacle(@RequestBody Spectacle spectacle){
         return spectacleServiceInt.addSpectacle(spectacle);
@@ -75,4 +96,5 @@ public class SpectacleController {
     public void deleteCommentaire(@PathVariable Long id){
         commentaireServiceInt.deleteCommentaire(id);
     }
+
 }
