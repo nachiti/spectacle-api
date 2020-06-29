@@ -152,4 +152,38 @@ public class SpectacleServiceImpl implements SpectacleServiceInt {
             return p;
         });
     }
+
+    @Override
+    public Spectacle addSpectacle(Spectacle spectacle) {
+        return spectacleRepository.save(spectacle);
+    }
+
+    @Override
+    public Spectacle updateSpectacle(Spectacle newSpectacle, Long id) {
+        return spectacleRepository.findById(id)
+                .map(spectacle -> {
+                    spectacle.setTitre(newSpectacle.getTitre());
+                    spectacle.setTypeSpectacle(newSpectacle.getTypeSpectacle());
+                    spectacle.setLatitude(newSpectacle.getLatitude());
+                    spectacle.setLongitude(newSpectacle.getLongitude());
+                    spectacle.setAdresse(newSpectacle.getAdresse());
+                    spectacle.setDateHeure(newSpectacle.getDateHeure());
+                    spectacle.setPrix(newSpectacle.getPrix());
+                    spectacle.setDescription(newSpectacle.getDescription());
+                    spectacle.setAccesHadicap(newSpectacle.isAccesHadicap());
+                    spectacle.setPhotosUrl(newSpectacle.getPhotosUrl());
+                    return spectacleRepository.save(spectacle);
+                })
+                .orElseGet(() -> {
+                    newSpectacle.setId(id);
+                    return spectacleRepository.save(newSpectacle);
+                });
+    }
+
+    @Override
+    public void deleteSpectacle(Long id) {
+        spectacleRepository.deleteById(id);
+    }
+
+
 }

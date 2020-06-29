@@ -73,4 +73,9 @@ public class CommentaireServiceImpl implements CommentaireServiceInt {
     public Commentaire addCommentaire(Commentaire commentaire) {
         return commentaireRepository.save(commentaire);
     }
+
+    @Override
+    public void deleteCommentaire(Long id) {
+        commentaireRepository.deleteById(id);
+    }
 }

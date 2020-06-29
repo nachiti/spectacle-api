@@ -14,4 +14,10 @@ public interface SpectacleServiceInt {
                                             Double prixMin,
                                             Double prixMax,
                                             Boolean accesHandicap);
+
+    Spectacle addSpectacle(Spectacle spectacle);
+
+    Spectacle updateSpectacle(Spectacle newSpectacle, Long id);
+
+    void deleteSpectacle(Long id);
 }

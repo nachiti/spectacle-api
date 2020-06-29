@@ -6,6 +6,7 @@ import com.example.spectacle.model.Spectacle;
 import com.example.spectacle.service.CommentaireServiceInt;
 import com.example.spectacle.service.SpectacleServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,4 +48,31 @@ public class SpectacleController {
         return commentaireServiceInt.addCommentaire(commentaire);
     }
 
+
+    //**Api d' administation**//
+
+    //add spectacle
+    @Secured(value = "ROLEADMIN")
+    @PostMapping("/spectacles")
+    public Spectacle addSpectacle(@RequestBody Spectacle spectacle){
+        return spectacleServiceInt.addSpectacle(spectacle);
+    }
+
+    //update spectacle
+    @PutMapping("/spectacles/{id}")
+    public Spectacle updateSpectacle(@RequestBody Spectacle newSpectacle,
+                                     @PathVariable Long id){
+       return spectacleServiceInt.updateSpectacle(newSpectacle, id);
+    }
+    //delete spectacle
+    @DeleteMapping("/spectacles/{id}")
+    public void deleteSpectacle(@PathVariable Long id){
+        spectacleServiceInt.deleteSpectacle(id);
+    }
+
+    //delete spectacle
+    @DeleteMapping("/commentaires/{id}")
+    public void deleteCommentaire(@PathVariable Long id){
+        commentaireServiceInt.deleteCommentaire(id);
+    }
 }
