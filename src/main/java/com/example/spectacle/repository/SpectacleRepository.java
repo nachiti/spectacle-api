@@ -2,9 +2,10 @@ package com.example.spectacle.repository;
 
 import com.example.spectacle.model.Spectacle;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@Repository
-public interface SpectacleRepository extends JpaRepository<Spectacle,Long> {
+@RepositoryRestResource
+public interface SpectacleRepository extends JpaRepository<Spectacle,Long>, JpaSpecificationExecutor<Spectacle> {
 
 }

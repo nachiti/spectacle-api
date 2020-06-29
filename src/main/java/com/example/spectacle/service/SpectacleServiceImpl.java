@@ -1,17 +1,25 @@
 package com.example.spectacle.service;
 
-import com.example.spectacle.model.Commentaire;
+import com.example.spectacle.exception.SpectacleNotFoundException;
 import com.example.spectacle.model.InterExter;
 import com.example.spectacle.model.Spectacle;
 import com.example.spectacle.model.TypeSpectacle;
 import com.example.spectacle.repository.CommentaireRepository;
 import com.example.spectacle.repository.SpectacleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import java.text.DateFormat;
-import java.util.Date;
+import javax.persistence.criteria.Predicate;
+import javax.transaction.Transactional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 
+@Service
+@Transactional
 public class SpectacleServiceImpl implements SpectacleServiceInt {
 
     @Autowired
@@ -19,16 +27,17 @@ public class SpectacleServiceImpl implements SpectacleServiceInt {
     @Autowired
     private CommentaireRepository commentaireRepository;
 
+    private static final String DATE_PATTERN = "dd/MM/yyyy hh:mm";
 
     @Override
-    public void initSpectacle() {
+    public void initSpectacle() throws ParseException {
         Spectacle spectacle1 = new Spectacle(
                 "AMIR"
                 , TypeSpectacle.Musique
                 , 50.632538
                 , 3.0781436
                 , "Zenith de lille, Lille Grand Palais, 1 Boulevard des Cités Unies, 59000 Lille, France"
-                , "12/07/2020 20:30",45.99
+                , new SimpleDateFormat("dd/MM/yyyy hh:mm").parse("12/07/2020 20:30"),45.99
                 , "Amir, l’artiste aux plus de 600 000 albums vendus et aux multiples tubes et récompenses est enfin de retour !\n" +
                         "\n" +
                         "Avec la sortie de ‘La Fête’, le premier single de son prochain album, le message est clair, universel et fédérateur : Fêtons la vie tous ensemble et tout le temps que ça dure. Prolongez la fête en retrouvant Amir sur scène en 2021, notamment au Zénith de Paris, le 6 mars 2021 !\n" +
@@ -48,7 +57,7 @@ public class SpectacleServiceImpl implements SpectacleServiceInt {
                 ,50.61420440673828
                 ,3.1350412368774414
                 , "stade pierre mauroy, 261 Boulevard de Tournai, Villeneuve-d'Ascq, France"
-                , "27/03/2021 20:30",37.50
+                , new SimpleDateFormat(DATE_PATTERN).parse("27/03/2021 20:30"),37.50
                 , "VersuS, le titre de la première chanson issu d’un projet incroyable et évident.\n" +
                 "\n" +
                 "VersuS, les confessions musicales de Vitaa et Slimane, deux artistes que le destin a décidé de réunir le temps d’un album duo. Disponible depuis le 23 aout dernier, il a été certifié disque de platine en 48 jours seulement avec plus de 100 000 exemplaires vendus.\n" +
@@ -67,7 +76,7 @@ public class SpectacleServiceImpl implements SpectacleServiceInt {
                 , 50.632538
                 , 3.0781436
                 , "Zenith de lille, Lille Grand Palais, 1 Boulevard des Cités Unies, 59000 Lille, France"
-                , "02/12/2020 20:30",39.00
+                , new SimpleDateFormat(DATE_PATTERN).parse("02/12/2020 20:30"),39.00
                 , "« LE PLUS GRAND CABARET DU MONDE »\n" +
                 "\n" +
                 "Présenté et animé par\n" +
@@ -93,7 +102,7 @@ public class SpectacleServiceImpl implements SpectacleServiceInt {
                 ,50.629191
                 , 3.058120
                 , "Théâtre Sebastopol, Place Sébastopol, 59000 Lille, France"
-                , "07/09/2020 20:00",39.00
+                , new SimpleDateFormat(DATE_PATTERN).parse("07/09/2020 20:00"),39.00
                 , "Le nouveau spectacle de Jérémy Ferrari\n" +
                 "\n" +
                 "Après la religion et la guerre, Jérémy Ferrari s’attaque à la santé !\n" +
@@ -108,56 +117,39 @@ public class SpectacleServiceImpl implements SpectacleServiceInt {
     }
 
     @Override
-    public void initCommentaire() {
+    public List<Spectacle> getAllSpectacles() {
+        return spectacleRepository.findAll();
+    }
 
-        List<Spectacle> spectacles = spectacleRepository.findAll();
+    @Override
+    public Spectacle getSpectaclesById(long id) {
+        return spectacleRepository.findById(id)
+                .orElseThrow(() -> new SpectacleNotFoundException(id));
+    }
 
-        Commentaire commentaire1 = new Commentaire(
-                "Patric"
-                , 5.0,"Que ce soit dans le parterre ou les gradins, l'acoustique de cette salle est parfaite. On peut manger rapidement dans le hall et l'ouverture au public suffisamment avant le spectacle permet d'en profiter avant de s'installer. Les chaises positionnées dans le parterre sont confortables. J'ai passé une excellente soirée"
-                , "23/06/2020 01:17"
-                , spectacles.get(0));
+    @Override
+    public List<Spectacle> getSpectaclesByCriteria(String ville, String type, Double prixMin, Double prixMax, Boolean accesHandicap) {
 
-        commentaireRepository.save(commentaire1);
+        return spectacleRepository.findAll((Specification<Spectacle>) (root, cq, cb) -> {
+            Predicate p = cb.conjunction();
 
-        Commentaire commentaire2 = new Commentaire(
-                "Thomas"
-                , 5.0
-                , "Bon accueil, nous avons été guidé afin de trouver notre place. Le son est très bon. Les tarifs en boisson restent correct. Par contre les écrans de retransmission sur les côtés de la scène devraient être un peu plus grand."
-                , "23/06/2020 03:12"
-                , spectacles.get(0));
-
-        commentaireRepository.save(commentaire2);
-
-        Commentaire commentaire3 = new Commentaire(
-                "Alice"
-                , 4.1
-                , "Bonne organisation et gestion de la foule. Personnel très aimable et fort agréable qui nous guide avec un grand sourire à nos place. Personnel de la buvette très accueillant. Buvette chère néanmoins (2€ la bouteille d'eau de 0,5)."
-                , "23/06/2020 14:10"
-                , spectacles.get(0));
-
-        commentaireRepository.save(commentaire3);
-
-        Commentaire commentaire4 = new Commentaire(
-                "Bob"
-                , 3.5
-                ,  "Prenez patience si vous stationnez votre auto au parking. Le moyen de vous rendre au Zenith est catastrophique... indications peu claires, prenez une marge pour vous rendre au spectacle ! Fauteuils ? Non, des chaises peu ergonomiques et inconfortables au possible."
-                , "23/06/2020 01:45"
-                , spectacles.get(0));
-
-        commentaireRepository.save(commentaire4);
-
-        Commentaire commentaire5 = new Commentaire(
-                "Noémie"
-                , 2.0
-                ,"Superbe infrastructure mais vent froid sur nous pendant tout le spectacle... Nous avons du garder nos vestes tellement il faisait froid. Le parking à disposition est ridicule par rapport au nombre de places du théâtre et peu importe le temps dehors, l'ouverture des portes ne se fera qu'1h avant l'événement (même si le personnel est présent) Heureusement l'artiste valait le détour et il a rendu ce moment merveilleux."
-                , "23/06/2020 04:30"
-                , spectacles.get(0));
-
-        commentaireRepository.save(commentaire5);
-
-/*        for (int i = 0; i < spectacles.size(); i++) {
-
-        }*/
+            if(!StringUtils.isEmpty(ville) ){
+                p = cb.and(p,cb.like(cb.lower(root.get("adresse")),"%"+ville.toLowerCase()+"%"));
+            }
+            if(!StringUtils.isEmpty(type) ){
+                p = cb.and(p,cb.like(root.get("typeSpectacle"),"%"+type+"%"));
+            }
+            if(!StringUtils.isEmpty(accesHandicap) ){
+                p = cb.and(p,cb.equal(root.get("accesHadicap"),accesHandicap));
+            }
+            if (Objects.nonNull(prixMin) && Objects.nonNull(prixMax) && prixMin<=prixMin){
+                p = cb.and(p,cb.between(root.get("prix"),prixMin,prixMax));
+            }else if(Objects.nonNull(prixMin)) {
+                p = cb.and(p,cb.greaterThanOrEqualTo(root.get("prix"),prixMin));
+            }else if(Objects.nonNull(prixMax)) {
+                p = cb.and(p,cb.lessThanOrEqualTo(root.get("prix"),prixMax));
+        }
+            return p;
+        });
     }
 }
