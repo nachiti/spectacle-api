@@ -66,21 +66,9 @@ public class SpectacleController {
 
     // get images of spectacle
     @GetMapping(value = "/api/images/{name}",produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] getImagesOfSpectacle(@PathVariable String name)throws IOException {
-        Resource resource = new ClassPathResource("static/images/"+name);
-        File file = resource.getFile();
-        Path path = Paths.get(file.toURI());
-        return Files.readAllBytes(path);
-    }
-
-    // get images of spectacle
-    @GetMapping(value = "/api/images2/{name}",produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] getImagesOfSpectacle2(@PathVariable String name) throws IOException {
-
+    public byte[] getImagesOfSpectacle(@PathVariable String name) throws IOException {
         ClassLoader  classLoader = getClass().getClassLoader();
-
         InputStream inputStream = classLoader.getResourceAsStream("static/images/" + name);
-
         assert inputStream != null;
         return IOUtils.toByteArray(inputStream);
     }
