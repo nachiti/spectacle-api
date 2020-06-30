@@ -5,6 +5,7 @@ import com.example.spectacle.model.Commentaire;
 import com.example.spectacle.model.Spectacle;
 import com.example.spectacle.service.CommentaireServiceInt;
 import com.example.spectacle.service.SpectacleServiceInt;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -13,11 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class SpectacleController {
@@ -68,6 +71,18 @@ public class SpectacleController {
         File file = resource.getFile();
         Path path = Paths.get(file.toURI());
         return Files.readAllBytes(path);
+    }
+
+    // get images of spectacle
+    @GetMapping(value = "/api/images2/{name}",produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getImagesOfSpectacle2(@PathVariable String name) throws IOException {
+
+        ClassLoader  classLoader = getClass().getClassLoader();
+
+        InputStream inputStream = classLoader.getResourceAsStream("static/images/" + name);
+
+        assert inputStream != null;
+        return IOUtils.toByteArray(inputStream);
     }
 
 
