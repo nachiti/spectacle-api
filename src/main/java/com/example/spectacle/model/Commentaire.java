@@ -1,5 +1,6 @@
 package com.example.spectacle.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Commentaire implements Serializable {
     private double note;
     @Lob
     private String texte;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern ="dd/MM/yyyy hh:mm:ss")
     private String date;
     @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
