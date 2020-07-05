@@ -28,7 +28,7 @@ public class Spectacle implements Serializable {
     private TypeSpectacle typeSpectacle;
     private double latitude, longitude;
     private String adresse;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern ="dd/MM/yyyy hh:mm")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateHeure;
     private double prix;
     @Lob

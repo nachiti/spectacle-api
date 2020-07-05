@@ -24,7 +24,7 @@ public class Commentaire implements Serializable {
     private double note;
     @Lob
     private String texte;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern ="dd/MM/yyyy hh:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
     private String date;
     @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
