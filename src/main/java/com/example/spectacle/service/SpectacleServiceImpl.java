@@ -40,7 +40,7 @@ public class SpectacleServiceImpl implements SpectacleServiceInt {
                 , 50.632538
                 , 3.0781436
                 , "Zenith de lille, Lille Grand Palais, 1 Boulevard des Cités Unies, 59000 Lille, France"
-                , new SimpleDateFormat("dd/MM/yyyy hh:mm").parse("12/07/2020 20:30"),45.99
+                , new SimpleDateFormat(DATE_PATTERN).parse("12/07/2020 20:30"),45.99
                 , "Amir, l’artiste aux plus de 600 000 albums vendus et aux multiples tubes et récompenses est enfin de retour !\n" +
                         "\n" +
                         "Avec la sortie de ‘La Fête’, le premier single de son prochain album, le message est clair, universel et fédérateur : Fêtons la vie tous ensemble et tout le temps que ça dure. Prolongez la fête en retrouvant Amir sur scène en 2021, notamment au Zénith de Paris, le 6 mars 2021 !\n" +

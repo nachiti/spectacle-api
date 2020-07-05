@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Data
@@ -25,12 +26,12 @@ public class Commentaire implements Serializable {
     @Lob
     private String texte;
     @Temporal(TemporalType.TIMESTAMP)
-    private String date;
+    private Date date;
     @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Spectacle spectacle;
 
-    public Commentaire(String pseudonyme, double note, String texte, String date, Spectacle spectacle) {
+    public Commentaire(String pseudonyme, double note, String texte, Date date, Spectacle spectacle) {
         this.pseudonyme = pseudonyme;
         this.note = note;
         this.texte = texte;
