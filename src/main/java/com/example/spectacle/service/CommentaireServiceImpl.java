@@ -5,12 +5,16 @@ import com.example.spectacle.model.Spectacle;
 import com.example.spectacle.repository.CommentaireRepository;
 import com.example.spectacle.repository.SpectacleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -71,6 +75,11 @@ public class CommentaireServiceImpl implements CommentaireServiceInt {
                 , spectacles.get(0));
 
         commentaireRepository.save(commentaire5);
+    }
+
+    @Override
+    public List<Commentaire> getAllCommentairesOfSpectacle(Long idSpectacle) {
+       return commentaireRepository.getAllCommentairesOfSpectacle(idSpectacle);
     }
 
     @Override

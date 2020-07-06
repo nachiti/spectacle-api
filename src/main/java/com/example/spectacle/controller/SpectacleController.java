@@ -3,6 +3,7 @@ package com.example.spectacle.controller;
 
 import com.example.spectacle.model.Commentaire;
 import com.example.spectacle.model.Spectacle;
+import com.example.spectacle.repository.CommentaireRepository;
 import com.example.spectacle.service.CommentaireServiceInt;
 import com.example.spectacle.service.SpectacleServiceInt;
 import org.apache.commons.io.IOUtils;
@@ -52,6 +53,13 @@ public class SpectacleController {
         return spectacleServiceInt.getSpectaclesByCriteria(ville, type, prixMin, prixMax, accesHandicap);
     }
 
+    //get all commentaires of spactacle
+    @GetMapping("/api/spectacles/{idSpectacle}/commentaires")
+    public List<Commentaire> getAllCommentairesOfSpectacle(@PathVariable Long idSpectacle){
+        return commentaireServiceInt.getAllCommentairesOfSpectacle(idSpectacle);
+    }
+
+
     //add commentaire in spectacle
     @PostMapping("/api/Commentaires")
     public Commentaire addCommentaire(@RequestBody Commentaire commentaire){
@@ -94,7 +102,7 @@ public class SpectacleController {
         spectacleServiceInt.deleteSpectacle(id);
     }
 
-    //delete spectacle
+    //delete commentaires
     @DeleteMapping("/commentaires/{id}")
     public void deleteCommentaire(@PathVariable Long id){
         commentaireServiceInt.deleteCommentaire(id);

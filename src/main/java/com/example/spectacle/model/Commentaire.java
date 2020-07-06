@@ -30,6 +30,8 @@ public class Commentaire implements Serializable {
     @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Spectacle spectacle;
+    @Column(name="spectacle_id", updatable=false,insertable=false)
+    private Long idSpectacle;
 
     public Commentaire(String pseudonyme, double note, String texte, Date date, Spectacle spectacle) {
         this.pseudonyme = pseudonyme;
