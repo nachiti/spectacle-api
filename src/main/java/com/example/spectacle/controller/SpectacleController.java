@@ -61,7 +61,7 @@ public class SpectacleController {
 
 
     //add commentaire in spectacle
-    @PostMapping("/api/Commentaires")
+    @PostMapping("/api/commentaires")
     public Commentaire addCommentaire(@RequestBody Commentaire commentaire){
         return commentaireServiceInt.addCommentaire(commentaire);
     }
