@@ -40,5 +40,12 @@ public class Commentaire implements Serializable {
         this.date = date;
         this.spectacle = spectacle;
     }
+
+    public Commentaire(String pseudonyme, double note, String texte, Date date) {
+        this.pseudonyme = pseudonyme;
+        this.note = note;
+        this.texte = texte;
+        this.date = date;
+    }
 }
 

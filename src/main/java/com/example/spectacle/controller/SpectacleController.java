@@ -3,25 +3,19 @@ package com.example.spectacle.controller;
 
 import com.example.spectacle.model.Commentaire;
 import com.example.spectacle.model.Spectacle;
-import com.example.spectacle.repository.CommentaireRepository;
+import com.example.spectacle.model.Test;
+import com.example.spectacle.repository.TestRepo;
 import com.example.spectacle.service.CommentaireServiceInt;
 import com.example.spectacle.service.SpectacleServiceInt;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 public class SpectacleController {
@@ -30,6 +24,9 @@ public class SpectacleController {
     private SpectacleServiceInt spectacleServiceInt;
     @Autowired
     private CommentaireServiceInt commentaireServiceInt;
+
+    @Autowired
+    TestRepo testRepo;
 
     //get All Spectacles
     @GetMapping("/api/spectacles")
@@ -61,10 +58,33 @@ public class SpectacleController {
 
 
     //add commentaire in spectacle
-    @PostMapping("/api/commentaires")
-    public Commentaire addCommentaire(@RequestBody Commentaire commentaire){
+    @PostMapping("/api/spectacles/{idSpectacle}/commentaires")
+    public Commentaire addCommentaire(@PathVariable(value = "idSpectacle") Long idSpectacle, @RequestBody Commentaire commentaire){
+        Spectacle spectacle = spectacleServiceInt.getSpectaclesById(idSpectacle);
+        commentaire.setSpectacle(spectacle);
         return commentaireServiceInt.addCommentaire(commentaire);
     }
+
+
+   /* //add test
+    @PostMapping("/api/spectacles/test")
+    public Test addTest(@RequestBody Test test) {
+        return testRepo.save(test);
+    }*/
+
+    //add test
+    @PostMapping(path = "/api/spectacles/{id}/test", consumes = "application/json", produces = "application/json" )
+    public Test addTest(@PathVariable(value = "id") Long id, @RequestBody Test test) {
+        test.setCoucou(id);
+        return testRepo.save(test);
+    }
+
+    //add commentaire in spectacle
+    @GetMapping("/api/test")
+    public List<Test> getTest(){
+        return testRepo.findAll();
+    }
+
 
     //get list imagesName of spectacle
     @GetMapping(value = "/api/spectacles/{id}/images")
