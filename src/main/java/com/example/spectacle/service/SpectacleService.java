@@ -5,7 +5,7 @@ import com.example.spectacle.model.Spectacle;
 import java.text.ParseException;
 import java.util.List;
 
-public interface SpectacleServiceInt {
+public interface SpectacleService {
     void initSpectacle() throws ParseException;
     List<Spectacle> getAllSpectacles();
     Spectacle getSpectaclesById(long id);

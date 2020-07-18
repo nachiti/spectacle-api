@@ -24,7 +24,7 @@ import java.util.Objects;
 
 @Service
 @Transactional
-public class SpectacleServiceImpl implements SpectacleServiceInt {
+public class SpectacleServiceImpl implements SpectacleService {
 
     @Autowired
     private SpectacleRepository spectacleRepository;
