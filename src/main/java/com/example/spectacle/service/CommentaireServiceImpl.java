@@ -5,10 +5,16 @@ import com.example.spectacle.model.Spectacle;
 import com.example.spectacle.repository.CommentaireRepository;
 import com.example.spectacle.repository.SpectacleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -19,15 +25,17 @@ public class CommentaireServiceImpl implements CommentaireServiceInt {
     @Autowired
     private CommentaireRepository commentaireRepository;
 
+    private static final String DATE_PATTERN = "dd/MM/yyyy hh:mm:ss";
+
     @Override
-    public void initCommentaire() {
+    public void initCommentaire() throws ParseException {
 
         List<Spectacle> spectacles = spectacleRepository.findAll();
 
         Commentaire commentaire1 = new Commentaire(
                 "Patric"
                 , 5.0,"Que ce soit dans le parterre ou les gradins, l'acoustique de cette salle est parfaite. On peut manger rapidement dans le hall et l'ouverture au public suffisamment avant le spectacle permet d'en profiter avant de s'installer. Les chaises positionnées dans le parterre sont confortables. J'ai passé une excellente soirée"
-                , "23/06/2020 01:17"
+                , new SimpleDateFormat(DATE_PATTERN).parse("23/06/2020 01:17:17")
                 , spectacles.get(0));
 
         commentaireRepository.save(commentaire1);
@@ -36,7 +44,7 @@ public class CommentaireServiceImpl implements CommentaireServiceInt {
                 "Thomas"
                 , 5.0
                 , "Bon accueil, nous avons été guidé afin de trouver notre place. Le son est très bon. Les tarifs en boisson restent correct. Par contre les écrans de retransmission sur les côtés de la scène devraient être un peu plus grand."
-                , "23/06/2020 03:12"
+                , new SimpleDateFormat(DATE_PATTERN).parse("23/06/2020 03:12:13")
                 , spectacles.get(0));
 
         commentaireRepository.save(commentaire2);
@@ -45,7 +53,7 @@ public class CommentaireServiceImpl implements CommentaireServiceInt {
                 "Alice"
                 , 4.1
                 , "Bonne organisation et gestion de la foule. Personnel très aimable et fort agréable qui nous guide avec un grand sourire à nos place. Personnel de la buvette très accueillant. Buvette chère néanmoins (2€ la bouteille d'eau de 0,5)."
-                , "23/06/2020 14:10"
+                , new SimpleDateFormat(DATE_PATTERN).parse("23/06/2020 14:10:20")
                 , spectacles.get(0));
 
         commentaireRepository.save(commentaire3);
@@ -54,7 +62,7 @@ public class CommentaireServiceImpl implements CommentaireServiceInt {
                 "Bob"
                 , 3.5
                 ,  "Prenez patience si vous stationnez votre auto au parking. Le moyen de vous rendre au Zenith est catastrophique... indications peu claires, prenez une marge pour vous rendre au spectacle ! Fauteuils ? Non, des chaises peu ergonomiques et inconfortables au possible."
-                , "23/06/2020 01:45"
+                , new SimpleDateFormat(DATE_PATTERN).parse("23/06/2020 01:45:48")
                 , spectacles.get(0));
 
         commentaireRepository.save(commentaire4);
@@ -63,10 +71,15 @@ public class CommentaireServiceImpl implements CommentaireServiceInt {
                 "Noémie"
                 , 2.0
                 ,"Superbe infrastructure mais vent froid sur nous pendant tout le spectacle... Nous avons du garder nos vestes tellement il faisait froid. Le parking à disposition est ridicule par rapport au nombre de places du théâtre et peu importe le temps dehors, l'ouverture des portes ne se fera qu'1h avant l'événement (même si le personnel est présent) Heureusement l'artiste valait le détour et il a rendu ce moment merveilleux."
-                , "23/06/2020 04:30"
+                , new SimpleDateFormat(DATE_PATTERN).parse("23/06/2020 04:30:45")
                 , spectacles.get(0));
 
         commentaireRepository.save(commentaire5);
+    }
+
+    @Override
+    public List<Commentaire> getAllCommentairesOfSpectacle(Long idSpectacle) {
+       return commentaireRepository.getAllCommentairesOfSpectacle(idSpectacle);
     }
 
     @Override

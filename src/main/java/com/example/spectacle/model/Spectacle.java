@@ -1,7 +1,9 @@
 package com.example.spectacle.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,6 +28,7 @@ public class Spectacle implements Serializable {
     private TypeSpectacle typeSpectacle;
     private double latitude, longitude;
     private String adresse;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateHeure;
     private double prix;
     @Lob
