@@ -6,7 +6,7 @@ import com.example.spectacle.model.Test;
 import java.text.ParseException;
 import java.util.List;
 
-public interface CommentaireServiceInt {
+public interface CommentaireService {
     void initCommentaire() throws ParseException;
 
     List<Commentaire> getAllCommentairesOfSpectacle(Long idUser);

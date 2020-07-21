@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail Spectacle</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+          crossorigin="anonymous"/>
+</head>
+<body>
+<div class="myContainer">
+    <h1> Gestion de Spectacle</h1>
+    <hr>
+    <a th:href="@{/admin/}"> <- Retour vers la page liste spectacle</a>
+    <h2> Detail d'un spectacle</h2>
+
+    <div>
+        <div id="row">
+            <div class="column" th:each="photo:${spectacle.photosUrl}">
+                <img th:src="@{'/admin/images/'+${photo}}" width="200" height="200">
+            </div>
+        </div>
+        <br/>
+        <span class="titre">id : </span><span th:text="${spectacle.id}"></span><br/>
+        <span class="titre">Type : </span><span th:text="${spectacle.typeSpectacle}"></span><br/>
+        <span class="titre">Latitude : </span><span th:text="${spectacle.latitude}"></span><br/>
+        <span class="titre">Longitude : </span><span th:text="${spectacle.longitude}"></span><br/>
+        <span class="titre">Adresse : </span><span th:text="${spectacle.adresse}"></span><br/>
+        <span class="titre">Date et Heure : </span>
+        <span th:text="${#dates.format(spectacle.dateHeure, 'dd/MM/yyyy hh:mm')}"></span><br/>
+        <span class="titre">Prix : </span><span th:text="${spectacle.prix}"></span><br/>
+        <span class="titre">Acées Handicap : </span><span th:text="${spectacle.accesHadicap}"></span><br/>
+        <span class="titre">Interieur/Exterieur : </span><span th:text="${spectacle.interExter}"></span><br/>
+        <span class="titre">Description : </span><span th:text="${spectacle.description}"></span><br/>
+        <a th:href="@{/admin/showFormForUpdate/{id}(id=${spectacle.id})}" class="btn btn-primary">Update</a>
+        <a th:href="@{/admin/deleteSpectacle/{id}(id=${spectacle.id})}" class="btn btn-danger">Delete</a>
+    </div>
+
+    <hr/>
+    <a th:href="@{/admin/}"> <-Retour vers la page liste spectacle</a>
+</div>
+</body>
+</html>
+
+
