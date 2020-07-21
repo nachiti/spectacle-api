@@ -9,12 +9,17 @@ import com.example.spectacle.service.CommentaireService;
 import com.example.spectacle.service.SpectacleService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,12 +112,31 @@ public class SpectacleController {
     }
 
     // get images of spectacle
-    @GetMapping(value = "/images/{name}",produces = MediaType.IMAGE_JPEG_VALUE)
+/*    @GetMapping(value = "/images/{name}",produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getImagesOfSpectacle(@PathVariable String name) throws IOException {
         ClassLoader  classLoader = getClass().getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream("static/images/" + name);
         assert inputStream != null;
         return IOUtils.toByteArray(inputStream);
+    }*/
+
+    // get images of spectacle
+    @GetMapping(value = "/images/{name}")
+    public ResponseEntity<ByteArrayResource> getImage(@PathVariable("name") String name){
+        if (name != null && !name.isEmpty()) {
+            try {
+                Path path = Paths.get("uploads",name);
+                byte[] buffer = Files.readAllBytes(path);
+                ByteArrayResource byteArrayResource = new ByteArrayResource(buffer);
+                return ResponseEntity.ok()
+                        .contentLength(buffer.length)
+                        .contentType(MediaType.parseMediaType("image/png"))
+                        .body(byteArrayResource);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 }
