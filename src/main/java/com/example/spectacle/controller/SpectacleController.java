@@ -36,11 +36,6 @@ public class SpectacleController {
     TestRepo testRepo;
 
 
-    // Login form
-    @RequestMapping("/login")
-    public String login() {
-        return "loginUser";
-    }
 
     //get All Spectacles
     @GetMapping("/spectacles")

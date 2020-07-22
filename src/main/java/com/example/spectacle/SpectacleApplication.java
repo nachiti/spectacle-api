@@ -1,10 +1,9 @@
 package com.example.spectacle;
 
 import com.example.spectacle.controller.BackOfficeController;
-import com.example.spectacle.service.AdminService;
 import com.example.spectacle.service.CommentaireService;
 import com.example.spectacle.service.SpectacleService;
-import com.example.spectacle.service.UtilisateurService;
+import com.example.spectacle.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,9 +23,7 @@ public class SpectacleApplication implements CommandLineRunner {
 	@Autowired
 	CommentaireService commentaireService;
 	@Autowired
-	UtilisateurService utilisateurService;
-	@Autowired
-	AdminService adminService;
+    UserService userService;
 
 	public static void main(String[] args) {
 		new File(BackOfficeController.uploadDirectory).mkdir();
@@ -42,8 +39,8 @@ public class SpectacleApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		spectacleService.initSpectacle();
 		commentaireService.initCommentaire();
-		utilisateurService.initUtilisateur();
-		adminService.initAdmin();
+		userService.initUtilisateur();
+		userService.initAdmin();
 
 	}
 }

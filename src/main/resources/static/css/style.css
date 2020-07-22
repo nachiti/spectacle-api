@@ -15,6 +15,7 @@ td {
 }
 
 .myform-control {
+    vertical-align: text-top;
     width: 100%;
     height: calc(1.5em + .75rem + 2px);
     padding: .375rem .75rem;

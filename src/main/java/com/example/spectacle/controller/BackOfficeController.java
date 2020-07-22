@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Controller
-@RequestMapping("/admin")
 public class BackOfficeController {
 
     public static String uploadDirectory = System.getProperty("user.dir") + "/uploads";
@@ -41,7 +40,16 @@ public class BackOfficeController {
      */
     @RequestMapping("/login")
     public String login() {
-        return "loginAdmin";
+        return "login";
+    }
+
+    /**
+     * Logout form
+     * @return
+     */
+    @RequestMapping("/logout")
+    public String logout() {
+        return "logout";
     }
 
     /**
@@ -54,6 +62,8 @@ public class BackOfficeController {
         model.addAttribute("listSpectacles", spectacleService.getAllSpectacles());
         return "index";
     }
+
+
 
     /**
      * afficher la vue detail spectacle
