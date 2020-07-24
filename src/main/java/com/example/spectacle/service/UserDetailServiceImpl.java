@@ -23,7 +23,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDetail userDetail = userService.findUserAndAdminByUsername(username);
-        if(username == null) throw new UsernameNotFoundException("User Name is not Found :(");
+        if(userDetail == null) throw new UsernameNotFoundException("User Name is not Found :(");
 
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(userDetail.getRole()));

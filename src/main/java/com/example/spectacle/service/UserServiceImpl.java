@@ -1,6 +1,7 @@
 package com.example.spectacle.service;
 
 import com.example.spectacle.model.Admin;
+import com.example.spectacle.model.Spectacle;
 import com.example.spectacle.model.UserDetail;
 import com.example.spectacle.model.Utilisateur;
 import com.example.spectacle.repository.AdminRepository;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -22,6 +21,8 @@ public class UserServiceImpl implements UserService {
     private UtilisateurRepository utilisateurRepository;
     @Autowired
     private AdminRepository adminRepository;
+    @Autowired
+    SpectacleService spectacleService;
 
     /**
      * recuper username, password et role de l'utilisateur et de l'Admin
@@ -30,7 +31,15 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDetail findUserAndAdminByUsername(String username) {
-        return utilisateurRepository.findUserAndAdminByUsername(username);
+        UserDetail userDetail = null;
+         Utilisateur utilisateur = findUtilisateurByUsername(username);
+         Admin admin = findAdminByUsername(username);
+         if (utilisateur!=null){
+             userDetail = new UserDetail(utilisateur.getUsername(),utilisateur.getPassword(),utilisateur.getRole());
+         }else if (admin!=null){
+             userDetail = new UserDetail(admin.getUsername(),admin.getPassword(),admin.getRole());
+         }
+    return userDetail;
     }
 
     @Override
@@ -58,36 +67,50 @@ public class UserServiceImpl implements UserService {
     public void initUtilisateur() {
         Utilisateur utilisateur1 = new Utilisateur(
                 "user1","123");
-        addUtlisisateur(utilisateur1);
+        addUtilisateur(utilisateur1);
         Utilisateur utilisateur2 = new Utilisateur(
                 "user2","321");
-        addUtlisisateur(utilisateur2);
+        addUtilisateur(utilisateur2);
     }
 
     @Override
-    public Utilisateur addUtlisisateur(Utilisateur utilisateur) {
+    public Utilisateur addUtilisateur(Utilisateur utilisateur) {
         String hashPw = bCryptPasswordEncoder.encode(utilisateur.getPassword());
         utilisateur.setPassword(hashPw);
         return utilisateurRepository.save(utilisateur);
     }
 
     @Override
-    public Utilisateur findUserByUsername(String username) {
+    public Utilisateur updateUtilisateur(Utilisateur newUtilisateur, String username) {
+         Utilisateur utilisateur = utilisateurRepository.findByUsername(username);
+         utilisateur.setUsername(newUtilisateur.getUsername());
+         utilisateur.setPassword(newUtilisateur.getPassword());
+        return addUtilisateur(utilisateur);
+    }
+
+    @Override
+    public void deleteUtilisateur(String username) {
+        utilisateurRepository.deleteByUsername(username);
+    }
+
+    @Override
+    public Utilisateur findUtilisateurByUsername(String username) {
         return utilisateurRepository.findByUsername(username);
     }
 
     @Override
-    public List<Utilisateur> getAllSpectacleFavorisOfUtilisateur(Long idUser) {
-        return null;
+    public Utilisateur addSpectacleToFavoris(String username, Long idSpectacle) {
+        Utilisateur utilisateur = utilisateurRepository.findByUsername(username);
+        Spectacle spectacle = spectacleService.getSpectaclesById(idSpectacle);
+        utilisateur.addSpectacle(spectacle);
+        return utilisateurRepository.save(utilisateur);
     }
 
     @Override
-    public Utilisateur addSpectacleToFavoris(Long idUser, Long idSpectacle) {
-        return null;
-    }
-
-    @Override
-    public void deleteSpectacleFromFavoris(Long idUser, Long idSpectacle) {
-
+    public Utilisateur deleteSpectacleFromFavoris(String username, Long idSpectacle) {
+        Utilisateur utilisateur = utilisateurRepository.findByUsername(username);
+        Spectacle spectacle = spectacleService.getSpectaclesById(idSpectacle);
+        utilisateur.removeSpectacle(spectacle);
+        return utilisateurRepository.save(utilisateur);
     }
 }

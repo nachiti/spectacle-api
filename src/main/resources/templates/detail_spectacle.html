@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{myLayout}">
 <head>
     <meta charset="UTF-8">
     <title>Detail Spectacle</title>
@@ -9,13 +11,13 @@
           crossorigin="anonymous"/>
 </head>
 <body>
-<div class="myContainer">
-    <h1> Gestion de Spectacle</h1>
-    <hr>
-    <a th:href="@{/admin/}"> <- Retour vers la page liste spectacle</a>
-    <h2> Detail d'un spectacle</h2>
-
-    <div>
+<div layout:fragment="content">
+    <div class="myContainer">
+        <h1> Detail d'un spectacle</h1>
+        <hr>
+        <a th:href="@{/admin/index}"> <- Retour vers la page liste spectacle</a>
+    </div>
+    <div class="myContainer">
         <div id="row">
             <div class="column" th:each="photo:${spectacle.photosUrl}">
                 <img th:src="@{'/admin/images/'+${photo}}" width="200" height="200">
@@ -23,6 +25,7 @@
         </div>
         <br/>
         <span class="titre">id : </span><span th:text="${spectacle.id}"></span><br/>
+        <span class="titre">Titre : </span><span th:text="${spectacle.titre}"></span><br/>
         <span class="titre">Type : </span><span th:text="${spectacle.typeSpectacle}"></span><br/>
         <span class="titre">Latitude : </span><span th:text="${spectacle.latitude}"></span><br/>
         <span class="titre">Longitude : </span><span th:text="${spectacle.longitude}"></span><br/>
@@ -33,12 +36,15 @@
         <span class="titre">Acées Handicap : </span><span th:text="${spectacle.accesHadicap}"></span><br/>
         <span class="titre">Interieur/Exterieur : </span><span th:text="${spectacle.interExter}"></span><br/>
         <span class="titre">Description : </span><span th:text="${spectacle.description}"></span><br/>
-        <a th:href="@{/admin/showFormForUpdate/{id}(id=${spectacle.id})}" class="btn btn-primary">Update</a>
-        <a th:href="@{/admin/deleteSpectacle/{id}(id=${spectacle.id})}" class="btn btn-danger">Delete</a>
+        <a th:href="@{/admin/showFormForUpdate/{id}(id=${spectacle.id})}" class="btn btn-primary spacer">Update</a>
+        <a th:onclick="@{'return confirm(\'Êtes-vous sûre de vouloir supprimer le spectacle '+${spectacle.titre}+' ?\')'}"
+           th:href="@{/admin/deleteSpectacle/{id}(id=${spectacle.id})}"
+           class="btn btn-danger spacer">Delete</a>
     </div>
-
-    <hr/>
-    <a th:href="@{/admin/}"> <-Retour vers la page liste spectacle</a>
+    <div class="myContainer">
+        <hr/>
+        <a th:href="@{/admin/index}"> <-Retour vers la page liste spectacle</a>
+    </div>
 </div>
 </body>
 </html>

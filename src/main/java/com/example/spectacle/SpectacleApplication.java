@@ -1,6 +1,6 @@
 package com.example.spectacle;
 
-import com.example.spectacle.controller.BackOfficeController;
+import com.example.spectacle.controller.SpectacleControllerAdmin;
 import com.example.spectacle.service.CommentaireService;
 import com.example.spectacle.service.SpectacleService;
 import com.example.spectacle.service.UserService;
@@ -26,7 +26,7 @@ public class SpectacleApplication implements CommandLineRunner {
     UserService userService;
 
 	public static void main(String[] args) {
-		new File(BackOfficeController.uploadDirectory).mkdir();
+		new File(SpectacleControllerAdmin.uploadDirectory).mkdir();
 		SpringApplication.run(SpectacleApplication.class, args);
 	}
 

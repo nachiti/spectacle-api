@@ -27,13 +27,15 @@ public interface UserService {
 
     void initUtilisateur();
 
-    Utilisateur addUtlisisateur(Utilisateur utilisateur);
+    Utilisateur addUtilisateur(Utilisateur utilisateur);
 
-    Utilisateur findUserByUsername(String username);
+    Utilisateur updateUtilisateur(Utilisateur utilisateur, String username);
 
-    List<Utilisateur> getAllSpectacleFavorisOfUtilisateur(Long idUser);
+    void deleteUtilisateur(String username);
 
-    Utilisateur addSpectacleToFavoris(Long idUser, Long idSpectacle);
+    Utilisateur findUtilisateurByUsername(String username);
 
-    void deleteSpectacleFromFavoris(Long idUser, Long idSpectacle);
+    Utilisateur addSpectacleToFavoris(String username, Long idSpectacle);
+
+    Utilisateur deleteSpectacleFromFavoris(String username, Long idSpectacle);
 }

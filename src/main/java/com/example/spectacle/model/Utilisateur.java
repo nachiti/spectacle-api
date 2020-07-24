@@ -34,4 +34,12 @@ public class Utilisateur {
             inverseJoinColumns = @JoinColumn(name = "spectacle_id")
     )
     private List<Spectacle> spectaclesFavoris;
+
+    public void addSpectacle( Spectacle spectacle){
+        this.spectaclesFavoris.add(spectacle);
+    }
+
+    public void removeSpectacle( Spectacle spectacle){
+        this.spectaclesFavoris.remove(spectacle);
+    }
 }

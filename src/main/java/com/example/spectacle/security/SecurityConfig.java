@@ -36,10 +36,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                    .anyRequest()
-                        .authenticated()
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/api/user/**").hasAuthority("USER")
+                .antMatchers("/api/public/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login").permitAll();
+                .loginPage("/admin/login").permitAll()
+                .defaultSuccessUrl("/admin/index")
+                .and()
+                .logout().permitAll()
+                .logoutSuccessUrl("/admin/login")
+                .and()
+                .exceptionHandling().accessDeniedPage("/admin/login");
     }
 }
