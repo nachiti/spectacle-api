@@ -1,24 +1,20 @@
 package com.example.spectacle.security;
 
-import com.example.spectacle.service.UtilisateurDetailServiceImpl;
+import com.example.spectacle.service.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
-@Order(1)
 @EnableWebSecurity
-public class SecurityConfigUser extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UtilisateurDetailServiceImpl utilisateurDetailService;
+    private UserDetailServiceImpl userDetailService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -29,7 +25,7 @@ public class SecurityConfigUser extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(utilisateurDetailService).passwordEncoder(bCryptPasswordEncoder);
+        auth.userDetailsService(userDetailService).passwordEncoder(bCryptPasswordEncoder);
         //auth.inMemoryAuthentication().withUser("admin").password("{noop}123").roles("USER");
     }
 
@@ -39,13 +35,19 @@ public class SecurityConfigUser extends WebSecurityConfigurerAdapter {
        // http.authorizeRequests().antMatchers("/").permitAll().and().csrf().disable();
 
         http
-                .antMatcher("/api/**")
                 .authorizeRequests()
-                    .anyRequest()
-                        .authenticated()
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/api/user/**").hasAuthority("USER")
+                .antMatchers("/api/public/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/api/login").permitAll();
-
+                .loginPage("/admin/login").permitAll()
+                .defaultSuccessUrl("/admin/index")
+                .and()
+                .logout().permitAll()
+                .logoutSuccessUrl("/admin/login")
+                .and()
+                .exceptionHandling().accessDeniedPage("/admin/login");
     }
 }

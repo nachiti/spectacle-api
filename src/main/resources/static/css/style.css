@@ -15,6 +15,7 @@ td {
 }
 
 .myform-control {
+    vertical-align: text-top;
     width: 100%;
     height: calc(1.5em + .75rem + 2px);
     padding: .375rem .75rem;
@@ -37,6 +38,8 @@ label {
 }
 
 #row {
+    display: flex;
+    vertical-align: top;
     white-space: nowrap;
     overflow: auto;
 }
@@ -49,9 +52,13 @@ label {
 }
 
 .myContainer{
+    margin-top: 2%;
     margin-right : 5%;
     margin-left: 5%;
-    margin-bottom: 5%;
+    margin-bottom: 2%;
+}
+.spacer{
+    margin-top: 2%;
 }
 
 .titre{
@@ -68,3 +75,10 @@ label {
     margin-left: 165px;
 }
 
+.my-nav-right{
+    flex-grow: 1;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: flex-end;
+}

@@ -3,11 +3,9 @@ package com.example.spectacle.service;
 import com.example.spectacle.exception.SpectacleNotFoundException;
 import com.example.spectacle.model.InterExter;
 import com.example.spectacle.model.Spectacle;
-import com.example.spectacle.model.Test;
 import com.example.spectacle.model.TypeSpectacle;
 import com.example.spectacle.repository.CommentaireRepository;
 import com.example.spectacle.repository.SpectacleRepository;
-import com.example.spectacle.repository.TestRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -31,17 +29,10 @@ public class SpectacleServiceImpl implements SpectacleService {
     @Autowired
     private CommentaireRepository commentaireRepository;
 
-    @Autowired
-    TestRepo   testRepo;
-
-
     private static final String DATE_PATTERN = "dd/MM/yyyy hh:mm";
 
     @Override
     public void initSpectacle() throws ParseException {
-
-        Test test = new Test("coucou");
-        testRepo.save(test);
 
         Spectacle spectacle1 = new Spectacle(
                 "AMIR"

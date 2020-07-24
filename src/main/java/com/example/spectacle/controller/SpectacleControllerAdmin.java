@@ -6,6 +6,8 @@ import com.example.spectacle.service.CommentaireService;
 import com.example.spectacle.service.SpectacleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,10 +23,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
+/**
+ * Contrôleur de l'api accessible depuis par l'adinistrateur
+ */
 @Controller
 @RequestMapping("/admin")
-public class BackOfficeController {
+public class SpectacleControllerAdmin {
 
     public static String uploadDirectory = System.getProperty("user.dir") + "/uploads";
 
@@ -37,26 +43,49 @@ public class BackOfficeController {
 
     /**
      * Login form
+     *
      * @return
      */
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public String login() {
-        return "loginAdmin";
+        return "login";
     }
 
     /**
-     *  Afficher la liste des spectacles sur la page d'acueil
-     * @param model
+     * Page par defaut redirection vers la page liste
+     *
      * @return
      */
     @GetMapping("/")
-    public String viewHomePage(Model model) {
-        model.addAttribute("listSpectacles", spectacleService.getAllSpectacles());
+    public String home() {
+        return "redirect:/admin/index";
+    }
+
+    /**
+     * Afficher la liste des spectacles sur la page d'acueil
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping("/index")
+    public String viewListPage(Model model,
+                               @RequestParam(name = "page", defaultValue = "0") int p,
+                               @RequestParam(name = "size", defaultValue = "10") int s,
+                               @RequestParam(name = "motCle", defaultValue = "") String mc) {
+        Page<Spectacle> pageSpectacles =
+                spectacleRepository.chercher("%" + mc + "%", PageRequest.of(p, s));
+        model.addAttribute("listSpectacles", pageSpectacles.getContent());
+        int[] pages = new int[pageSpectacles.getTotalPages()];
+        model.addAttribute("pages", pages);
+        model.addAttribute("size", s);
+        model.addAttribute("currentPage", p);
+        model.addAttribute("motcle", mc);
         return "index";
     }
 
     /**
-     * afficher la vue detail spectacle
+     * Afficher la vue detail spectacle
+     *
      * @param id
      * @param model
      * @return
@@ -69,6 +98,7 @@ public class BackOfficeController {
 
     /**
      * Afficher le formulaire d'ajout d'un spectacle
+     *
      * @param model
      * @return
      */
@@ -80,7 +110,8 @@ public class BackOfficeController {
     }
 
     /**
-     * save spectacle to database
+     * Save spectacle to database
+     *
      * @param spectacle
      * @param files
      * @return
@@ -95,11 +126,12 @@ public class BackOfficeController {
             spectacle.setPhotosUrl(newImageNames);
         }
         spectacleService.addSpectacle(spectacle);
-        return "redirect:/admin/showDetailSpectacle/"+spectacle.getId();
+        return "redirect:/admin/showDetailSpectacle/" + spectacle.getId();
     }
 
     /**
-     *  Update spectacle to database
+     * Update spectacle to database
+     *
      * @param spectacle
      * @param files
      * @param removeImages
@@ -109,46 +141,56 @@ public class BackOfficeController {
     public String updateSpectacle(@ModelAttribute("spectacle") Spectacle spectacle,
                                   @RequestParam("files") MultipartFile[] files,
                                   @RequestParam(name = "removeImages", required = false) String removeImages) {
-        Collection<String> spectacleImageList = getSpectacleImageList(spectacle.getId());
-        spectacle.setPhotosUrl(spectacleImageList);
-        //supprimer les images à supprimer
-        if (removeImages != null && !removeImages.isEmpty()) {
-            Collection<String> imageNames = removeImagesFromSpectacle(spectacle.getPhotosUrl(), removeImages);
-            spectacle.setPhotosUrl(imageNames);
+
+        Spectacle oldspectacle = spectacleService.getSpectaclesById(spectacle.getId());
+        if (spectacle != oldspectacle) {
+            Collection<String> spectacleImageList = getSpectacleImageList(spectacle.getId());
+            spectacle.setPhotosUrl(spectacleImageList);
+            //supprimer les images à supprimer
+            if (removeImages != null && !removeImages.isEmpty()) {
+                Collection<String> imageNames = removeImagesFromSpectacle(spectacle.getPhotosUrl(), removeImages);
+                spectacle.setPhotosUrl(imageNames);
+            }
+            //ajouter les images s'il le faut
+            if (files != null && !files[0].isEmpty()) {
+                Collection<String> newImageNames = addImagesInSpectacle(
+                        spectacle.getPhotosUrl(), spectacle.getTitre(), files);
+                spectacle.setPhotosUrl(newImageNames);
+            }
+            spectacleService.addSpectacle(spectacle);
+
+            return "redirect:/admin/showDetailSpectacle/" + spectacle.getId();
+
+        } else {
+            return "";
         }
-        //ajouter les images s'il le faut
-        if (files != null && !files[0].isEmpty()) {
-            Collection<String> newImageNames = addImagesInSpectacle(
-                    spectacle.getPhotosUrl(), spectacle.getTitre(), files);
-            spectacle.setPhotosUrl(newImageNames);
-        }
-        spectacleService.addSpectacle(spectacle);
-        return "redirect:/admin/showDetailSpectacle/"+spectacle.getId();
     }
 
     /**
      * Recuperer la liste des images d'un spectacle
+     *
      * @param id
      * @return
      */
     private Collection<String> getSpectacleImageList(long id) {
         Spectacle oldSpectacle = spectacleService.getSpectaclesById(id);
-        if (oldSpectacle != null && oldSpectacle.getPhotosUrl()!= null) {
+        if (oldSpectacle != null && oldSpectacle.getPhotosUrl() != null) {
             return oldSpectacle.getPhotosUrl();
-        }else {
+        } else {
             return new ArrayList<>();
         }
     }
 
     /**
      * Ajout des nouveaux images à un spectacle
+     *
      * @param newImageNames
      * @param titre
      * @param files
      * @return
      */
-    private Collection<String> addImagesInSpectacle( Collection<String> newImageNames, String titre,
-                                                     MultipartFile[] files) {
+    private Collection<String> addImagesInSpectacle(Collection<String> newImageNames, String titre,
+                                                    MultipartFile[] files) {
         int cpt = newImageNames.size() + 1;
         for (MultipartFile file : files) {
             //renommé les images en format titre_1.png
@@ -168,6 +210,7 @@ public class BackOfficeController {
 
     /**
      * supprimer les images d'un spectacle
+     *
      * @param imageNames
      * @param removeImages
      * @return
@@ -188,6 +231,7 @@ public class BackOfficeController {
 
     /**
      * Afficher le formulaire de modification d'un spectacle
+     *
      * @param id
      * @param model
      * @return
@@ -200,18 +244,33 @@ public class BackOfficeController {
     }
 
     /**
-     *  Supprimer un spectacle
+     * Supprimer un spectacle avec un id
+     *
      * @param id
      * @return
      */
     @GetMapping("/deleteSpectacle/{id}")
     public String deleteSpectacle(@PathVariable(value = "id") Long id) {
         spectacleService.deleteSpectacle(id);
-        return "redirect:/admin/";
+        return "redirect:/admin/index";
     }
 
     /**
-     *  Recuperer un image du spectacle
+     * Supprimer un spectacle depuis la page liste
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/deleteSpectacle")
+    public String deleteSpectacle(Long id, String motcle, int page, int size) {
+        //TODO Add delete method for delete IMAGES FROM APPLICATION
+        spectacleService.deleteSpectacle(id);
+        return "redirect:/admin/index?page=" + page + "&size=" + size + "&motcle=" + motcle;
+    }
+
+    /**
+     * Recuperer un image du spectacle
+     *
      * @param name
      * @return
      */

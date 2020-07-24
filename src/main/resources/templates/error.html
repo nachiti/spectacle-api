@@ -7,12 +7,12 @@
 </head>
 
 <body th:with="httpStatus=${T(org.springframework.http.HttpStatus).valueOf(#response.status)}">
-
+<div class="myContainer">
 <h1 th:text="|${httpStatus} - ${httpStatus.reasonPhrase}|">404</h1>
 <p th:utext="${errorMessage}">Error java.lang.NullPointerException</p>
 <hr/>
-<a th:href="@{/admin/}">Retour vers la page liste spectacle</a>
-
+<a th:href="@{/admin/index}"><-Retour vers la page d'accueil</a>
+</div>
 </body>
 
 </html>
