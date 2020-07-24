@@ -1,6 +1,5 @@
 package com.example.spectacle.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,6 +28,7 @@ public class Spectacle implements Serializable {
     private double latitude, longitude;
     private String adresse;
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date dateHeure;
     private double prix;
     @Lob
@@ -36,7 +36,6 @@ public class Spectacle implements Serializable {
     private boolean accesHadicap;
     @Enumerated(EnumType.STRING)
     private InterExter interExter;
-    private boolean favoris;
     @OneToMany(mappedBy = "spectacle")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Collection<Commentaire> commentaires;
@@ -52,7 +51,6 @@ public class Spectacle implements Serializable {
         this.description = description;
         this.accesHadicap = accesHadicap;
         this.interExter = interExter;
-        this.favoris = false;
     }
 
     public Spectacle(String titre, Collection<String> photosUrl, TypeSpectacle typeSpectacle, double latitude, double longitude, String adresse, Date dateHeure, double prix, String description, boolean accesHadicap, InterExter interExter) {
@@ -67,6 +65,5 @@ public class Spectacle implements Serializable {
         this.description = description;
         this.accesHadicap = accesHadicap;
         this.interExter = interExter;
-        this.favoris = false;
     }
 }
