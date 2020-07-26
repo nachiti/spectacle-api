@@ -73,7 +73,7 @@ public class SpectacleControllerAdmin {
                                @RequestParam(name = "size", defaultValue = "10") int s,
                                @RequestParam(name = "motCle", defaultValue = "") String mc) {
         Page<Spectacle> pageSpectacles =
-                spectacleRepository.chercher("%" + mc + "%", PageRequest.of(p, s));
+                spectacleRepository.findByTitreLike("%" + mc + "%", PageRequest.of(p, s));
         model.addAttribute("listSpectacles", pageSpectacles.getContent());
         int[] pages = new int[pageSpectacles.getTotalPages()];
         model.addAttribute("pages", pages);

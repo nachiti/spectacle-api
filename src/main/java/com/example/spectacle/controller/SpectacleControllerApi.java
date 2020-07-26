@@ -139,7 +139,7 @@ public class SpectacleControllerApi {
      * @param utilisateur
      * @return
      */
-    @PostMapping(value = "/user/create")
+    @PostMapping(value = "/public/createUser")
     @ResponseBody
     public Utilisateur addNewUtilisateur(@RequestBody Utilisateur utilisateur){
         return userService.addUtilisateur(utilisateur);

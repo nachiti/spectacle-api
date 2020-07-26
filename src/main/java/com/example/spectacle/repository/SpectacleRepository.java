@@ -12,6 +12,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource
 public interface SpectacleRepository extends JpaRepository<Spectacle,Long>, JpaSpecificationExecutor<Spectacle> {
 
-    @Query("select s from Spectacle s where s.titre like :x")
-    Page<Spectacle> chercher(@Param("x") String mc, Pageable pageable);
+    Page<Spectacle> findByTitreLike(@Param("x") String mc, Pageable pageable);
+
 }

@@ -61,7 +61,8 @@
                 <td th:title="${spectacle.photosUrl}" th:text="${spectacle.photosUrl.size()}"></td>
                 <td th:title="${spectacle.typeSpectacle}" th:text="${spectacle.typeSpectacle}"></td>
                 <td th:title="${spectacle.adresse}" th:text="${spectacle.adresse}"></td>
-                <td th:title="${spectacle.dateHeure}" th:text="${spectacle.dateHeure}"></td>
+                <td th:title="${spectacle.dateHeure}"
+                    th:text="${#dates.format(spectacle.dateHeure, 'dd/MM/yyyy HH:mm')}"></td>
                 <td th:title="${spectacle.prix}" th:text="${spectacle.prix}"></td>
                 <td th:title="${spectacle.description}" th:text="${spectacle.description}"></td>
                 <td th:title="${spectacle.accesHadicap}" th:text="${spectacle.accesHadicap}"></td>
