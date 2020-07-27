@@ -143,8 +143,9 @@ public class SpectacleServiceImpl implements SpectacleService {
             if(!StringUtils.isEmpty(ville) ){
                 p = cb.and(p,cb.like(cb.lower(root.get("adresse")),"%"+ville.toLowerCase()+"%"));
             }
-            if(!StringUtils.isEmpty(type) ){
-                p = cb.and(p,cb.like(root.get("typeSpectacle"),"%"+type+"%"));
+            if(!StringUtils.isEmpty(type)){
+                TypeSpectacle typeSpectacle = TypeSpectacle.valueOf(type);
+                p = cb.and(p,cb.equal(root.get("typeSpectacle"),typeSpectacle));
             }
             if(!StringUtils.isEmpty(accesHandicap) ){
                 p = cb.and(p,cb.equal(root.get("accesHadicap"),accesHandicap));

@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Contrôleur de l'api accessible depuis l'application mobile
  */
-@Controller
+@RestController
 @RequestMapping("/api")
 public class SpectacleControllerApi {
 
@@ -40,7 +40,6 @@ public class SpectacleControllerApi {
      * @return List<Spectacle>
      */
     @GetMapping("/public/spectacles")
-    @ResponseBody
     public List<Spectacle> getAllSpectacles() {
         return spectacleService.getAllSpectacles();
     }
@@ -51,7 +50,6 @@ public class SpectacleControllerApi {
      * @return Spectacle
      */
     @GetMapping("/public/spectacles/{id}")
-    @ResponseBody
     public Spectacle getSpectaclesById(@PathVariable Long id) {
         return spectacleService.getSpectaclesById(id);
     }
@@ -66,7 +64,6 @@ public class SpectacleControllerApi {
      * @return
      */
     @GetMapping("/public/spectacles/searchBy")
-    @ResponseBody
     public List<Spectacle> getSpectaclesByCriteria(@RequestParam(name = "ville", required = false) String ville,
                                                    @RequestParam(name = "type", required = false)String type,
                                                    @RequestParam(name = "prixMin", required = false)Double prixMin,
@@ -81,7 +78,6 @@ public class SpectacleControllerApi {
      * @return
      */
     @GetMapping("/public/spectacles/{idSpectacle}/commentaires")
-    @ResponseBody
     public List<Commentaire> getAllCommentairesOfSpectacle(@PathVariable Long idSpectacle){
         return commentaireService.getAllCommentairesOfSpectacle(idSpectacle);
     }
@@ -93,7 +89,6 @@ public class SpectacleControllerApi {
      * @return
      */
     @PostMapping("/user/spectacles/{idSpectacle}/commentaires")
-    @ResponseBody
     public Commentaire addCommentaire(@PathVariable(value = "idSpectacle") Long idSpectacle,
                                       @RequestBody Commentaire commentaire){
         Spectacle spectacle = spectacleService.getSpectaclesById(idSpectacle);
@@ -140,7 +135,6 @@ public class SpectacleControllerApi {
      * @return
      */
     @PostMapping(value = "/public/createUser")
-    @ResponseBody
     public Utilisateur addNewUtilisateur(@RequestBody Utilisateur utilisateur){
         return userService.addUtilisateur(utilisateur);
     }
@@ -152,7 +146,6 @@ public class SpectacleControllerApi {
      * @return
      */
     @PostMapping(value = "/user/update/{username}")
-    @ResponseBody
     public Utilisateur updateUtilisateur(@RequestBody Utilisateur utilisateur,
                                          @PathVariable(value = "username") String username){
         return userService.updateUtilisateur(utilisateur,username);
@@ -183,7 +176,7 @@ public class SpectacleControllerApi {
      * @param id id spectacle
      * @return
      */
-    @PostMapping(value = "/user/{username}/addSpectaclefavoris/{id}")
+    @PostMapping(value = "/user/{username}/addSpectacleFavoris/{id}")
     public Utilisateur addSpectacleToFavoris( @PathVariable(value = "username") String username,
                                               @PathVariable(value = "id") long id){
         return userService.addSpectacleToFavoris(username,id);
@@ -195,7 +188,7 @@ public class SpectacleControllerApi {
      * @param id id spectacle
      * @return
      */
-    @PostMapping(value = "/user/{username}/deleteSpectaclefavoris/{id}")
+    @PostMapping(value = "/user/{username}/deleteSpectacleFavoris/{id}")
     public Utilisateur deleteSpectacleFromFavoris( @PathVariable(value = "username") String username,
                                               @PathVariable(value = "id") long id){
         return userService.deleteSpectacleFromFavoris(username,id);

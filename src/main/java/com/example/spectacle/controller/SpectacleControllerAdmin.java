@@ -47,7 +47,7 @@ public class SpectacleControllerAdmin {
      * @return
      */
     @GetMapping("/login")
-    public String login() {
+    public String login(@RequestParam(required = false) String message) {
         return "login";
     }
 
@@ -269,7 +269,7 @@ public class SpectacleControllerAdmin {
     }
 
     /**
-     * Recuperer un image du spectacle
+     * Recuperer une image du spectacle
      *
      * @param name
      * @return
