@@ -2,6 +2,7 @@ package com.example.spectacle.controller;
 
 
 import com.example.spectacle.model.Commentaire;
+import com.example.spectacle.model.Search;
 import com.example.spectacle.model.Spectacle;
 import com.example.spectacle.model.Utilisateur;
 import com.example.spectacle.repository.UtilisateurRepository;
@@ -54,7 +55,7 @@ public class SpectacleControllerApi {
         return spectacleService.getSpectaclesById(id);
     }
 
-    /**
+/*    *//**
      * Chercher les spectacles par different critère
      * @param ville
      * @param type
@@ -62,7 +63,7 @@ public class SpectacleControllerApi {
      * @param prixMax
      * @param accesHandicap
      * @return
-     */
+     *//*
     @GetMapping("/public/spectacles/searchBy")
     public List<Spectacle> getSpectaclesByCriteria(@RequestParam(name = "ville", required = false) String ville,
                                                    @RequestParam(name = "type", required = false)String type,
@@ -70,6 +71,14 @@ public class SpectacleControllerApi {
                                                    @RequestParam(name = "prixMax", required = false) Double prixMax,
                                                    @RequestParam(name = "accesHandicap", required = false)Boolean accesHandicap) {
         return spectacleService.getSpectaclesByCriteria(ville, type, prixMin, prixMax, accesHandicap);
+    }*/
+
+    /**
+     * Chercher les spectacles par different critère
+     */
+    @PostMapping("/public/spectacles/search")
+    public List<Spectacle> getSpectaclesByCriteria(@RequestBody Search search) {
+        return spectacleService.getSpectaclesByCriteria(search);
     }
 
     /**
