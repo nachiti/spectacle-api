@@ -2,6 +2,7 @@ package com.example.spectacle.service;
 
 import com.example.spectacle.exception.SpectacleNotFoundException;
 import com.example.spectacle.model.InterExter;
+import com.example.spectacle.model.Search;
 import com.example.spectacle.model.Spectacle;
 import com.example.spectacle.model.TypeSpectacle;
 import com.example.spectacle.repository.CommentaireRepository;
@@ -157,6 +158,30 @@ public class SpectacleServiceImpl implements SpectacleService {
             }else if(Objects.nonNull(prixMax)) {
                 p = cb.and(p,cb.lessThanOrEqualTo(root.get("prix"),prixMax));
         }
+            return p;
+        });
+    }
+
+    @Override
+    public List<Spectacle> getSpectaclesByCriteria(Search search) {
+        return spectacleRepository.findAll((Specification<Spectacle>) (root, cq, cb) -> {
+            Predicate p = cb.conjunction();
+            if(Objects.nonNull(search.getVille()) && !StringUtils.isEmpty(search.getVille()) ){
+                p = cb.and(p,cb.like(cb.lower(root.get("adresse")),"%"+search.getVille().toLowerCase()+"%"));
+            }
+            if(Objects.nonNull(search.getTypeSpectacleList()) && !search.getTypeSpectacleList().isEmpty()){
+                for (TypeSpectacle typeSpectacle : search.getTypeSpectacleList()){
+                    p = cb.and(p,cb.equal(root.get("typeSpectacle"),typeSpectacle));
+                }
+            }
+            if(Objects.nonNull(search.getAccesHandicaplist()) && !search.getAccesHandicaplist().isEmpty()){
+                for (Boolean b : search.getAccesHandicaplist()){
+                    p = cb.and(p,cb.equal(root.get("accesHadicap"),b));
+                }
+            }
+            if (search.getPrixMin() <=  search.getPrixMax()){
+                p = cb.and(p,cb.between(root.get("prix"),search.getPrixMin() , search.getPrixMax()));
+            }
             return p;
         });
     }
