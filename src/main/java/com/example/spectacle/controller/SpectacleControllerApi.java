@@ -78,6 +78,7 @@ public class SpectacleControllerApi {
      */
     @PostMapping("/public/spectacles/search")
     public List<Spectacle> getSpectaclesByCriteria(@RequestBody Search search) {
+        System.out.println("search:"+search.toString());
         return spectacleService.getSpectaclesByCriteria(search);
     }
 

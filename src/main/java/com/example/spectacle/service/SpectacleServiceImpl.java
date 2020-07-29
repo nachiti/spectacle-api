@@ -170,13 +170,21 @@ public class SpectacleServiceImpl implements SpectacleService {
                 p = cb.and(p,cb.like(cb.lower(root.get("adresse")),"%"+search.getVille().toLowerCase()+"%"));
             }
             if(Objects.nonNull(search.getTypeSpectacleList()) && !search.getTypeSpectacleList().isEmpty()){
-                for (TypeSpectacle typeSpectacle : search.getTypeSpectacleList()){
-                    p = cb.and(p,cb.equal(root.get("typeSpectacle"),typeSpectacle));
+                p = cb.and(p,cb.equal(root.get("typeSpectacle"),search.getTypeSpectacleList().get(0)));
+                for (int i = 0; i <search.getTypeSpectacleList().size() ; i++) {
+                    p = cb.or(p,cb.equal(root.get("typeSpectacle"),search.getTypeSpectacleList().get(i)));
                 }
             }
-            if(Objects.nonNull(search.getAccesHandicaplist()) && !search.getAccesHandicaplist().isEmpty()){
-                for (Boolean b : search.getAccesHandicaplist()){
-                    p = cb.and(p,cb.equal(root.get("accesHadicap"),b));
+            if(Objects.nonNull(search.getAccesHandicapList()) && !search.getAccesHandicapList().isEmpty()){
+                p = cb.and(p,cb.equal(root.get("accesHadicap"),search.getAccesHandicapList().get(0)));
+                for (Boolean b : search.getAccesHandicapList()){
+                    p = cb.or(p,cb.equal(root.get("accesHadicap"),b));
+                }
+            }
+            if(Objects.nonNull(search.getInterExterList()) && !search.getInterExterList().isEmpty()){
+                p = cb.and(p,cb.equal(root.get("interExter"),search.getInterExterList().get(0)));
+                for (InterExter ie : search.getInterExterList()){
+                    p = cb.or(p,cb.equal(root.get("interExter"),ie));
                 }
             }
             if (search.getPrixMin() <=  search.getPrixMax()){
