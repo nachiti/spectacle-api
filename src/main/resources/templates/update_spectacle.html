@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{myLayout}">
 <head>
     <meta charset="UTF-8">
     <title>Update Spectacle</title>
@@ -10,106 +12,106 @@
     <script type="text/javascript" th:src="@{/js/actions.js}"></script>
 </head>
 <body>
-<div class="myContainer">
-    <h1> Gestion de Spectacle</h1>
-    <hr>
-    <a th:href="@{/admin/}"> <- Retour vers la page liste spectacle</a>
-    <h2> Modifier un spectacle</h2>
+<div layout:fragment="content">
+    <div class="myContainer">
+        <h1> Modification d'un spectacle</h1>
+        <hr>
+        <a th:href="@{/admin/index}"> <- Retour vers la page liste spectacle</a>
+    </div>
+    <div class="myContainer">
 
-    <form th:action="@{/admin/updateSpectacle}"
-          th:object="${spectacle}" method="POST" enctype="multipart/form-data">
-        <div class="block">
-            <label>id : <span th:text="*{id}" class="myform-control mb-4 col-4"></span>
-                <input type="hidden" th:field="*{id}" class="myform-control mb-4 col-4"/>
-            </label>
-        </div>
-        <div class="block">
-            <label>Titre :
-                <input type="text" th:field="*{titre}" class="myform-control mb-4 col-4" required/>
-            </label>
-        </div>
-        <div class="block">
-            <div id="row">
-                <div class="column" th:each="photo, iStat:${spectacle.photosUrl}">
-                    <img th:id="@{'photo'+${iStat.index}}" class="myblock" th:src="@{'/admin/images/'+${photo}}"
-                         width="200"
-                         height="200">
-                    <button th:id="@{'btn'+${iStat.index}}" class="btn btn-danger myblock" type="button"
-                            th:onclick="@{'removeOrResetImage('+${iStat.index}+',\''+${photo}+'\')'}">Supprimer
-                    </button>
+        <form th:action="@{/admin/updateSpectacle}"
+              th:object="${spectacle}" method="POST" enctype="multipart/form-data">
+            <div class="block">
+                <div id="row">
+                    <div class="column" th:each="photo, iStat:${spectacle.photosUrl}">
+                        <img th:id="@{'photo'+${iStat.index}}" class="myblock" th:src="@{'/admin/images/'+${photo}}"
+                             width="200"
+                             height="200">
+                        <button th:id="@{'btn'+${iStat.index}}" class="btn btn-danger myblock" type="button"
+                                th:onclick="@{'removeOrResetImage('+${iStat.index}+',\''+${photo}+'\')'}">Supprimer
+                        </button>
+                    </div>
+                    <input id="removeList" type="hidden" th:name="removeImages"/>
                 </div>
-                <input id="removeList" type="hidden" th:name="removeImages"/>
             </div>
-        </div>
-        <div class="block">
-            <label>Ajouter des nouveaux photos :
-                <input class="mb-4 col-4" type="file" name="files" accept="image/png, image/jpeg" multiple/>
-            </label>
-        </div>
-        <div class="block">
-            <label>Type :
-                <select name="typeSpectacle" th:field="*{typeSpectacle}" class="myform-control mb-4 col-4" required>
-                    <option th:each="typeSpectacle : ${T(com.example.spectacle.model.TypeSpectacle).values()}"
-                            th:value="${typeSpectacle}" th:text="${typeSpectacle}">
-                    </option>
-                </select>
-            </label>
-        </div>
-        <div class="block">
-            <label>Latitude :
-                <input type="text" th:field="*{latitude}" class="myform-control mb-4 col-4" required/>
-            </label>
-        </div>
-        <div class="block">
-            <label>Longitude :
-                <input type="text" th:field="*{longitude}" class="myform-control mb-4 col-4" required/>
-            </label>
-        </div>
-        <div class="block">
-            <label>Adresse :
-                <input type="text" th:field="*{adresse}" class="myform-control mb-4 col-4" required/>
-            </label>
-        </div>
-        <div class="block">
-            <label>Date et Heure :
-                <input type="datetime-local" th:field="*{dateHeure}"
-                       th:text="${#dates.format(dateHeure, 'dd/MM/yyyy hh:mm')}" class="myform-control mb-4 col-4"
-                       required/>
-            </label>
-        </div>
-        <div class="block">
-            <label>Prix :
-                <input type="text" th:field="*{prix}" class="myform-control mb-4 col-4" required/>
-            </label>
-        </div>
-        <div class="block">
-            <label>Description :
-                <textarea th:field="*{description}" class="myform-control mb-4 col-4" required></textarea>
-            </label>
-        </div>
-        <div class="block">
-            <label>Acées Handicap :
-                <select name="accesHadicap" th:field="*{accesHadicap}" class="myform-control mb-4 col-4" required>
-                    <option th:value="true" th:text="Oui"></option>
-                    <option th:value="false" th:text="Non"></option>
-                </select>
-            </label>
-        </div>
-        <div class="block">
-            <label>Interieur/Exterieur :
-                <select name="interExter" th:field="*{interExter}" class="myform-control mb-4 col-4" required>
-                    <option th:each="interExter : ${T(com.example.spectacle.model.InterExter).values()}"
-                            th:value="${interExter}" th:text="${interExter}">
-                </select>
-            </label>
-        </div>
-        <div class="block">
-            <button type="submit" class="btnForm btn btn-info col-2"> Modifier</button>
-        </div>
-    </form>
-    <hr/>
-    <a th:href="@{/admin/}"> <-Retour vers la page liste spectacle</a>
+            <div class="block">
+                <label for="image">Ajouter des photos : </label>
+                    <input id="image" class="mb-4 col-4 spacer" type="file" name="files"
+                           accept="image/png, image/jpeg" multiple/>
+            </div>
+            <div class="block">
+                <label>id :</label>
+                <strong th:text="*{id}" class="mb-4 col-4"></strong>
+                <input type="hidden" th:field="*{id}" class="myform-control mb-4 col-4"/>
+            </div>
+            <div class="block">
+                <label for="titre">Titre :</label>
+                <input id="titre" type="text" th:field="*{titre}"
+                       class="myform-control mb-4 col-4" required/>
+            </div>
+            <div class="block">
+                <label for="type">Type :</label>
+                    <select id="type" name="typeSpectacle" th:field="*{typeSpectacle}"
+                            class="myform-control mb-4 col-4" required>
+                        <option th:each="typeSpectacle : ${T(com.example.spectacle.model.TypeSpectacle).values()}"
+                                th:value="${typeSpectacle}" th:text="${typeSpectacle}">
+                        </option>
+                    </select>
+            </div>
+            <div class="block">
+                <label for="latitude">Latitude :</label>
+                    <input id="latitude" type="text" th:field="*{latitude}"
+                           class="myform-control mb-4 col-4" required/>
+            </div>
+            <div class="block">
+                <label>Longitude :
+                    <input type="text" th:field="*{longitude}"
+                           class="myform-control mb-4 col-4" required/>
+                </label>
+            </div>
+            <div class="block">
+                <label for="adresse">Adresse : </label>
+                    <input id="adresse" type="text" th:field="*{adresse}"
+                           class="myform-control mb-4 col-4" required/>
+            </div>
+            <div class="block">
+                <label for="dateHeure">Date et Heure :</label>
+                    <input id="dateHeure" type="datetime-local" th:field="*{dateHeure}"
+                           th:text="${#dates.format(dateHeure, 'dd/MM/yyyy hh:mm')}"
+                           class="myform-control mb-4 col-4" required/>
+            </div>
+            <div class="block">
+                <label for="prix">Prix :</label>
+                    <input id="prix" type="text" th:field="*{prix}"
+                           class="myform-control mb-4 col-4" required/>
+            </div>
+            <div class="block">
+                <label for="description">Description : </label>
+                    <textarea id="description" th:field="*{description}"
+                              class="myform-control mb-4 col-4" required></textarea>
+            </div>
+            <div class="block">
+                <label for="accesHadicap">Acées Handicap :</label>
+                    <select id="accesHadicap" name="accesHadicap" th:field="*{accesHadicap}" class="myform-control mb-4 col-4" required>
+                        <option th:value="true" th:text="Oui"></option>
+                        <option th:value="false" th:text="Non"></option>
+                    </select>
+            </div>
+            <div class="block">
+                <label for="interExter">Interieur/Exterieur : </label>
+                    <select id="interExter" name="interExter" th:field="*{interExter}" class="myform-control mb-4 col-4" required>
+                        <option th:each="interExter : ${T(com.example.spectacle.model.InterExter).values()}"
+                                th:value="${interExter}" th:text="${interExter}">
+                    </select>
+            </div>
+            <div class="block">
+                <button type="submit" class="btnForm btn btn-info col-2"> Modifier</button>
+            </div>
+        </form>
+        <hr/>
+        <a th:href="@{/admin/index}"> <-Retour vers la page liste spectacle</a>
+    </div>
 </div>
-
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.example.spectacle.service;
 
+import com.example.spectacle.model.Search;
 import com.example.spectacle.model.Spectacle;
 
 import java.text.ParseException;
@@ -14,6 +15,8 @@ public interface SpectacleService {
                                             Double prixMin,
                                             Double prixMax,
                                             Boolean accesHandicap);
+
+    List<Spectacle> getSpectaclesByCriteria(Search search);
 
     Spectacle addSpectacle(Spectacle spectacle);
 

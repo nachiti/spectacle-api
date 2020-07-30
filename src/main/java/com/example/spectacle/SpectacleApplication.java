@@ -1,10 +1,9 @@
 package com.example.spectacle;
 
-import com.example.spectacle.controller.BackOfficeController;
-import com.example.spectacle.service.AdminService;
+import com.example.spectacle.controller.SpectacleControllerAdmin;
 import com.example.spectacle.service.CommentaireService;
 import com.example.spectacle.service.SpectacleService;
-import com.example.spectacle.service.UtilisateurService;
+import com.example.spectacle.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,19 +16,17 @@ import java.io.File;
 
 @SpringBootApplication
 @ComponentScan({"com.example.spectacle","controller"})
-public class SpectacleApplication implements CommandLineRunner {
-
+//public class SpectacleApplication implements CommandLineRunner {
+public class SpectacleApplication {
 	@Autowired
 	SpectacleService spectacleService;
 	@Autowired
 	CommentaireService commentaireService;
 	@Autowired
-	UtilisateurService utilisateurService;
-	@Autowired
-	AdminService adminService;
+    UserService userService;
 
 	public static void main(String[] args) {
-		new File(BackOfficeController.uploadDirectory).mkdir();
+		new File(SpectacleControllerAdmin.uploadDirectory).mkdir();
 		SpringApplication.run(SpectacleApplication.class, args);
 	}
 
@@ -38,12 +35,12 @@ public class SpectacleApplication implements CommandLineRunner {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Override
+/*	@Override
 	public void run(String... args) throws Exception {
 		spectacleService.initSpectacle();
 		commentaireService.initCommentaire();
-		utilisateurService.initUtilisateur();
-		adminService.initAdmin();
+		userService.initUtilisateur();
+		userService.initAdmin();
 
-	}
+	}*/
 }

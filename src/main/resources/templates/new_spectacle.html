@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{myLayout}">
 <head>
     <meta charset="UTF-8">
     <title>Add Spectacle</title>
@@ -9,83 +11,99 @@
           crossorigin="anonymous"/>
 </head>
 <body>
-<div class="myContainer">
-    <h1> Gestion de Spectacle</h1>
-    <hr/>
-    <a th:href="@{/admin/}"> <-Retour vers la page liste spectacle</a>
-    <h2> Ajouter un spectacle</h2>
-
-    <form th:action="@{/admin/saveSpectacle}"
-          th:object="${spectacle}" method="POST" enctype="multipart/form-data" required>
-        <div class="block">
-            <label for="titre">Titre :</label>
-            <input id="titre" type="text" th:field="*{titre}"
-                   placeholder="titre du spectalce" class="myform-control mb-4 col-4" required/>
-        </div>
-        <div class="block">
-            <label for="image">Ajouter des photos : </label>
-            <input id="image" type="file" name="files" accept="image/png, image/jpeg" class="mb-4 col-4" multiple required/>
-        </div>
-        <div class="block">
-            <label for="type">Type :</label>
-            <select id="type" name="typeSpectacle" th:field="*{typeSpectacle}" class="myform-control mb-4 col-4" required>
-                <option th:each="typeSpectacle : ${T(com.example.spectacle.model.TypeSpectacle).values()}"
-                        th:value="${typeSpectacle}" th:text="${typeSpectacle}">
-                </option>
-            </select>
-        </div>
-        <div class="block">
-            <label for="latitude">Latitude :</label>
-            <input id="latitude" type="text" th:field="*{latitude}"
-                   placeholder="latitude du spectalce" class="myform-control mb-4 col-4" required/>
-        </div>
-        <div class="block">
-            <label for="longitude">Longitude :</label>
-            <input id="longitude" type="text" th:field="*{longitude}"
-                   placeholder="longitude du spectalce" class="myform-control mb-4 col-4" required/>
-        </div>
-        <div class="block">
-            <label for="adresse">Adresse : </label>
-            <input id="adresse" type="text" th:field="*{adresse}"
-                   placeholder="adresse du spectalce" class="myform-control mb-4 col-4" required/>
-        </div>
-        <div class="block">
-            <label for="dateHeure">Date et Heure :</label>
-            <input id="dateHeure" type="datetime-local" th:field="*{dateHeure}"
-                   th:text="${#dates.format(dateHeure, 'dd/MM/yyyy hh:mm')}"
-                   placeholder="dateHeure du spectalce" class="myform-control mb-4 col-4" required/>
-        </div>
-        <div class="block">
-            <label for="prix">Prix :</label>
-            <input id="prix" type="text" th:field="*{prix}"
-                   placeholder="prix du spectalce" class="myform-control mb-4 col-4" required/>
-        </div>
-        <div class="block">
-            <label for="description">Description : </label>
-            <textarea id="description" th:field="*{description}"
-                      placeholder="description du spectalce" class="myform-control mb-4 col-4" required></textarea>
-        </div>
-        <div class="block">
-            <label for="accesHadicap">Acées Handicap :</label>
-            <select id="accesHadicap" name="accesHadicap" th:field="*{accesHadicap}" class="myform-control mb-4 col-4"
-                    required>
-                <option th:value="true" th:text="Oui"></option>
-                <option th:value="false" th:text="Non"></option>
-            </select>
-        </div>
-        <div class="block">
-            <label for="interExter">Interieur/Exterieur : </label>
-            <select id="interExter" name="interExter" th:field="*{interExter}" class="myform-control mb-4 col-4" required>
-                <option th:each="interExter : ${T(com.example.spectacle.model.InterExter).values()}"
-                        th:value="${interExter}" th:text="${interExter}">
-            </select>
-        </div>
-        <div class="block">
-        <button type="submit" class="btnForm btn btn-info col-2"> Enregistrer</button>
-        </div>
-    </form>
-    <hr/>
-    <a th:href="@{/admin/}"> <-Retour vers la page liste spectacle</a>
+<div layout:fragment="content">
+    <div class="myContainer">
+        <h1> Ajout d'un spectacle</h1>
+        <hr/>
+        <a th:href="@{/admin/index}"> <-Retour vers la page liste spectacle</a>
+    </div>
+    <div class="myContainer">
+        <form th:action="@{/admin/saveSpectacle}"
+              th:object="${spectacle}" method="POST" enctype="multipart/form-data" required>
+            <div class="block">
+                <label for="titre">Titre :</label>
+                <input id="titre" type="text" th:field="*{titre}"
+                       placeholder="titre du spectalce" class="myform-control mb-4 col-4" required/>
+            </div>
+            <div class="block">
+                <label for="image">Ajouter des photos : </label>
+                <input id="image" type="file" name="files" accept="image/png, image/jpeg" class="mb-4 col-4" multiple
+                       required/>
+            </div>
+            <div class="block">
+                <label for="type">Type :</label>
+                <select id="type" name="typeSpectacle" th:field="*{typeSpectacle}" class="myform-control mb-4 col-4"
+                        required>
+                    <option th:each="typeSpectacle : ${T(com.example.spectacle.model.TypeSpectacle).values()}"
+                            th:value="${typeSpectacle}" th:text="${typeSpectacle}">
+                    </option>
+                </select>
+            </div>
+            <div class="block">
+                <label for="latitude">Latitude :</label>
+                <input id="latitude" type="text" th:field="*{latitude}"
+                       placeholder="latitude du spectalce" class="myform-control mb-4 col-4" required/>
+            </div>
+            <div class="block">
+                <label for="longitude">Longitude :</label>
+                <input id="longitude" type="text" th:field="*{longitude}"
+                       placeholder="longitude du spectalce" class="myform-control mb-4 col-4" required/>
+            </div>
+            <div class="block">
+                <label for="adresse">Adresse : </label>
+                <input id="adresse" type="text" th:field="*{adresse}"
+                       placeholder="adresse du spectalce" class="myform-control mb-4 col-4" required/>
+            </div>
+            <div class="block">
+                <label for="dateHeure">Date et Heure :</label>
+                <input id="dateHeure" type="datetime-local" th:field="*{dateHeure}"
+                       th:text="${#dates.format(dateHeure, 'dd/MM/yyyy hh:mm')}"
+                       placeholder="dateHeure du spectalce" class="myform-control mb-4 col-4" required/>
+            </div>
+<!--            <div class="block">
+                <label for="date">Date :</label>
+                <input id="date" type="date"
+                       placeholder="date" class="myform-control mb-4 col-4" required/>
+            </div>
+            <div class="block">
+                <label for="heure">Heure :</label>
+                <input id="heure" type="time"
+                       placeholder="Heure" class="myform-control mb-4 col-4" required/>
+            </div>-->
+            <div class="block">
+                <label for="prix">Prix :</label>
+                <input id="prix" type="text" th:field="*{prix}"
+                       placeholder="prix du spectalce" class="myform-control mb-4 col-4" required/>
+            </div>
+            <div class="block">
+                <label for="description">Description : </label>
+                <textarea id="description" th:field="*{description}"
+                          placeholder="description du spectalce" class="myform-control mb-4 col-4" required></textarea>
+            </div>
+            <div class="block">
+                <label for="accesHadicap">Acées Handicap :</label>
+                <select id="accesHadicap" name="accesHadicap" th:field="*{accesHadicap}"
+                        class="myform-control mb-4 col-4"
+                        required>
+                    <option th:value="true" th:text="Oui"></option>
+                    <option th:value="false" th:text="Non"></option>
+                </select>
+            </div>
+            <div class="block">
+                <label for="interExter">Interieur/Exterieur : </label>
+                <select id="interExter" name="interExter" th:field="*{interExter}" class="myform-control mb-4 col-4"
+                        required>
+                    <option th:each="interExter : ${T(com.example.spectacle.model.InterExter).values()}"
+                            th:value="${interExter}" th:text="${interExter}">
+                </select>
+            </div>
+            <div class="block">
+                <button type="submit" class="btnForm btn btn-info col-2"> Enregistrer</button>
+            </div>
+        </form>
+        <hr/>
+        <a th:href="@{/admin/index}"> <-Retour vers la page liste spectacle</a>
+    </div>
 </div>
 </body>
 </html>

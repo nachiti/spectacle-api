@@ -2,12 +2,11 @@ package com.example.spectacle.service;
 
 import com.example.spectacle.exception.SpectacleNotFoundException;
 import com.example.spectacle.model.InterExter;
+import com.example.spectacle.model.Search;
 import com.example.spectacle.model.Spectacle;
-import com.example.spectacle.model.Test;
 import com.example.spectacle.model.TypeSpectacle;
 import com.example.spectacle.repository.CommentaireRepository;
 import com.example.spectacle.repository.SpectacleRepository;
-import com.example.spectacle.repository.TestRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -31,17 +30,10 @@ public class SpectacleServiceImpl implements SpectacleService {
     @Autowired
     private CommentaireRepository commentaireRepository;
 
-    @Autowired
-    TestRepo   testRepo;
-
-
     private static final String DATE_PATTERN = "dd/MM/yyyy hh:mm";
 
     @Override
     public void initSpectacle() throws ParseException {
-
-        Test test = new Test("coucou");
-        testRepo.save(test);
 
         Spectacle spectacle1 = new Spectacle(
                 "AMIR"
@@ -152,8 +144,9 @@ public class SpectacleServiceImpl implements SpectacleService {
             if(!StringUtils.isEmpty(ville) ){
                 p = cb.and(p,cb.like(cb.lower(root.get("adresse")),"%"+ville.toLowerCase()+"%"));
             }
-            if(!StringUtils.isEmpty(type) ){
-                p = cb.and(p,cb.like(root.get("typeSpectacle"),"%"+type+"%"));
+            if(!StringUtils.isEmpty(type)){
+                TypeSpectacle typeSpectacle = TypeSpectacle.valueOf(type);
+                p = cb.and(p,cb.equal(root.get("typeSpectacle"),typeSpectacle));
             }
             if(!StringUtils.isEmpty(accesHandicap) ){
                 p = cb.and(p,cb.equal(root.get("accesHadicap"),accesHandicap));
@@ -165,6 +158,38 @@ public class SpectacleServiceImpl implements SpectacleService {
             }else if(Objects.nonNull(prixMax)) {
                 p = cb.and(p,cb.lessThanOrEqualTo(root.get("prix"),prixMax));
         }
+            return p;
+        });
+    }
+
+    @Override
+    public List<Spectacle> getSpectaclesByCriteria(Search search) {
+        return spectacleRepository.findAll((Specification<Spectacle>) (root, cq, cb) -> {
+            Predicate p = cb.conjunction();
+            if(Objects.nonNull(search.getVille()) && !StringUtils.isEmpty(search.getVille()) ){
+                p = cb.and(p,cb.like(cb.lower(root.get("adresse")),"%"+search.getVille().toLowerCase()+"%"));
+            }
+            if(Objects.nonNull(search.getTypeSpectacleList()) && !search.getTypeSpectacleList().isEmpty()){
+                p = cb.and(p,cb.equal(root.get("typeSpectacle"),search.getTypeSpectacleList().get(0)));
+                for (int i = 0; i <search.getTypeSpectacleList().size() ; i++) {
+                    p = cb.or(p,cb.equal(root.get("typeSpectacle"),search.getTypeSpectacleList().get(i)));
+                }
+            }
+            if(Objects.nonNull(search.getAccesHandicapList()) && !search.getAccesHandicapList().isEmpty()){
+                p = cb.and(p,cb.equal(root.get("accesHadicap"),search.getAccesHandicapList().get(0)));
+                for (Boolean b : search.getAccesHandicapList()){
+                    p = cb.or(p,cb.equal(root.get("accesHadicap"),b));
+                }
+            }
+            if(Objects.nonNull(search.getInterExterList()) && !search.getInterExterList().isEmpty()){
+                p = cb.and(p,cb.equal(root.get("interExter"),search.getInterExterList().get(0)));
+                for (InterExter ie : search.getInterExterList()){
+                    p = cb.or(p,cb.equal(root.get("interExter"),ie));
+                }
+            }
+            if (search.getPrixMin() <=  search.getPrixMax()){
+                p = cb.and(p,cb.between(root.get("prix"),search.getPrixMin() , search.getPrixMax()));
+            }
             return p;
         });
     }
