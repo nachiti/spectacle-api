@@ -79,9 +79,10 @@
         </div>
     </div>
     <div class="myContainer">
-        <ul class="nav nav-pills">
-            <li th:class="${currentPage}==${status.index}?'active':''" th:each="page,status:${pages}">
-                <a th:href="@{/admin/index(page=${status.index},size=${size},motcle=${motcle})}"
+        <ul class="pagination pagination-lg">
+            <li class="page-item" th:classappend="${currentPage}==${status.index}?'disabled':''"
+                th:each="page,status:${pages}">
+                <a class="page-link" th:href="@{/admin/index(page=${status.index},size=${size},motcle=${motcle})}"
                    th:text="${status.index}"></a>
             </li>
         </ul>

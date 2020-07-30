@@ -70,7 +70,7 @@ public class SpectacleControllerAdmin {
     @GetMapping("/index")
     public String viewListPage(Model model,
                                @RequestParam(name = "page", defaultValue = "0") int p,
-                               @RequestParam(name = "size", defaultValue = "10") int s,
+                               @RequestParam(name = "size", defaultValue = "7") int s,
                                @RequestParam(name = "motCle", defaultValue = "") String mc) {
         Page<Spectacle> pageSpectacles =
                 spectacleRepository.findByTitreLike("%" + mc + "%", PageRequest.of(p, s));
