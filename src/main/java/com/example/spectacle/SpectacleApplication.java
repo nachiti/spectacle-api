@@ -16,8 +16,8 @@ import java.io.File;
 
 @SpringBootApplication
 @ComponentScan({"com.example.spectacle","controller"})
-//public class SpectacleApplication implements CommandLineRunner {
-public class SpectacleApplication {
+public class SpectacleApplication implements CommandLineRunner {
+/*public class SpectacleApplication {*/
 	@Autowired
 	SpectacleService spectacleService;
 	@Autowired
@@ -35,12 +35,12 @@ public class SpectacleApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-/*	@Override
+	@Override
 	public void run(String... args) throws Exception {
 		spectacleService.initSpectacle();
 		commentaireService.initCommentaire();
 		userService.initUtilisateur();
 		userService.initAdmin();
 
-	}*/
+	}
 }
